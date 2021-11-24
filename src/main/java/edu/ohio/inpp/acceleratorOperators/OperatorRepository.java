@@ -1,7 +1,7 @@
 package edu.ohio.inpp.acceleratorOperators;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface OperatorRepository extends CrudRepository<Operator, Integer> {
+public interface OperatorRepository extends JpaRepository<Operator, Integer> {
     
 }
