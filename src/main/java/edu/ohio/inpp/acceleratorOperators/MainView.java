@@ -74,9 +74,9 @@ public class MainView extends VerticalLayout{
         operatorGrid.setColumns("id", "fullName", "loginName");
         // operatorGrid.getColumnByKey("id").setWidth("50px").setFlexGrow(0);
         
-        filter.setPlaceholder("Filter by name...");
+        filter.setPlaceholder("This filter doesn't work yet.");
 
-        Operator operator = operatorRepository.findById(11).get();
+        listOperators(null);
 
     }
 
