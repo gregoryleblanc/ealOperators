@@ -9,3 +9,4 @@ frontend/generated
 tsconfig.json
 types.d.ts
 webpack.config.js
+org.eclipse.m2e*
