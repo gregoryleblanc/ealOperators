@@ -40,15 +40,17 @@ public class MainController {
 
     @GetMapping(path = "/makedemooperators")
     public @ResponseBody String makeDemoOperator() {
-        String[] names = {"Demo Operator 1", "Demo Operator 2", "Demo Operator 3"};
+        String[] firstNames = {"Bill", "Stewart", "Demo"};
+        String[] lastNames = {"Operator 1", "Operator 2", "Operator 3"};
         String[] loginNames = {"demo1", "demo2", "demo3"};
-        for (Integer i =0; i < names.length; i++) {
+        for (Integer i =0; i < firstNames.length; i++) {
             Operator operator = new Operator();
             // Create the operator and set the created time.
             operator.setCreated(LocalDateTime.now());
             // Save so that we can have the Id for phones, email, and address.
             operatorRepository.save(operator);
-            operator.setFullName(names[i]);
+            operator.setFirstName(firstNames[i]);
+            operator.setLastName(lastNames[i]);
             operator.setActive(true);
             operator.setComments("Here's a comment");
             operator.setLoginName(loginNames[i]);

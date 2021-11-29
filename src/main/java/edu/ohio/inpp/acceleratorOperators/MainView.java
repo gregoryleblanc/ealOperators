@@ -34,7 +34,7 @@ public class MainView extends VerticalLayout{
     public MainView(OperatorRepository operatorRepository) {
         H1 heading = new H1("Operator Training Database");
     
-        List<Person> personList = new ArrayList<>();
+        // List<Person> personList = new ArrayList<>();
 
         add(heading, new Text("Welcome to MainView by Greg."));
 
@@ -71,17 +71,24 @@ public class MainView extends VerticalLayout{
         HorizontalLayout actions = new HorizontalLayout(filter, addNewBtn);
         add(actions, operatorGrid);
         operatorGrid.setHeight("300px");
-        operatorGrid.setColumns("id", "fullName", "loginName");
+        operatorGrid.setColumns("id", "firstName", "lastName", "loginName");
         // operatorGrid.getColumnByKey("id").setWidth("50px").setFlexGrow(0);
         
-        filter.setPlaceholder("This filter doesn't work yet.");
+        filter.setPlaceholder("Search by last name");
+        filter.setValueChangeMode(ValueChangeMode.EAGER);
+        filter.addValueChangeListener(e -> listOperators(e.getValue()));
 
         listOperators(null);
 
     }
 
     void listOperators(String filterText) {
-        operatorGrid.setItems(operatorRepository.findAll());
+        if (!StringUtils.hasLength(filterText)){
+            operatorGrid.setItems(operatorRepository.findAll());
+        }
+        else {
+            operatorGrid.setItems(operatorRepository.findByLastNameStartsWithIgnoreCase(filterText));
+        }
     }
 }
 
