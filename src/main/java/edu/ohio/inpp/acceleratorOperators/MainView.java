@@ -24,6 +24,8 @@ import java.util.ArrayList;
 public class MainView extends VerticalLayout{
 
     private final OperatorRepository operatorRepository;
+
+    private final OperatorEditor operatorEditor;
     
     final Grid<Operator> operatorGrid;
 
@@ -31,57 +33,57 @@ public class MainView extends VerticalLayout{
 
     private final Button addNewBtn;
 
-    public MainView(OperatorRepository operatorRepository) {
+    public MainView(OperatorRepository opRepository, OperatorEditor opEditor) {
+        
+        // Set the page H1 header.
         H1 heading = new H1("Operator Training Database");
     
-        // List<Person> personList = new ArrayList<>();
-
+        //Add some  sub heading text.
         add(heading, new Text("Welcome to MainView by Greg."));
 
-        // personList.add(new Person(100, "Lucas", "Kane", 68,
-        //         new Addy("12080", "Washington"), "127-942-237"));
-        // personList.add(new Person(101, "Peter", "Buchanan", 38,
-        //         new Addy("93849", "New York"), "201-793-488"));
-        // personList.add(new Person(102, "Samuel", "Lee", 53,
-        //         new Addy("86829", "New York"), "043-713-538"));
-        // personList.add(new Person(103, "Anton", "Ross", 37,
-        //         new Addy("63521", "New York"), "150-813-6462"));
-        // personList.add(new Person(104, "Aaron", "Atkinson", 18,
-        //         new Addy("25415", "Washington"), "321-679-8544"));
-        // personList.add(new Person(105, "Jack", "Woodward", 28,
-        //         new Addy("95632", "New York"), "187-338-588"));
-        
-        // Grid<Person> grid = new Grid<>(Person.class);
-        // grid.setItems(personList);
-        
-        // grid.removeColumnByKey("id");
-        
-        // // The Grid<>(Person.class) sorts the properties and in order to
-        // // reorder the properties we use the 'setColumns' method.
-        // grid.setColumns("firstName", "lastName", "age", "addy",
-        //         "phoneNumber");
-        // add(grid);
-
-
-        this.operatorRepository = operatorRepository;
+        // I think this is plumbing.
+        this.operatorRepository = opRepository;
+        this.operatorEditor = opEditor;
         this.operatorGrid = new Grid<>(Operator.class);
         this.filter = new TextField();
+
+        // This creates a button with a + to add new operators
         this.addNewBtn = new Button("Doesn't work.  Don't touch.", VaadinIcon.PLUS.create());
         
+        // This lays out the search by last name and add new buttons.
         HorizontalLayout actions = new HorizontalLayout(filter, addNewBtn);
-        add(actions, operatorGrid);
+        
+        // This adds the actions (above), the grid for operators, and the
+        // operator editor.
+        add(actions, operatorGrid, opEditor);
         operatorGrid.setHeight("300px");
         operatorGrid.setColumns("id", "firstName", "lastName", "loginName");
-        // operatorGrid.getColumnByKey("id").setWidth("50px").setFlexGrow(0);
-        
+        // Make the ID column fixed width.
+        operatorGrid.getColumnByKey("id").setWidth("50px").setFlexGrow(0);
+
+        // Set up the filter box and plumb it in.
         filter.setPlaceholder("Search by last name");
         filter.setValueChangeMode(ValueChangeMode.EAGER);
         filter.addValueChangeListener(e -> listOperators(e.getValue()));
+
+        // Connect selected operator to editor or hide if none selected
+        operatorGrid.asSingleSelect().addValueChangeListener(e -> {
+            opEditor.editOperator(e.getValue());
+        });
+
+        // Listen for changes made by the editor, and refresh data from
+        // the backend.
+
+        opEditor.setChangeHandler(() -> {
+            opEditor.setVisible(false);
+            listOperators(filter.getValue());;
+        });
 
         listOperators(null);
 
     }
 
+    // This sets up the operator listing, and enables the filter functionality.
     void listOperators(String filterText) {
         if (!StringUtils.hasLength(filterText)){
             operatorGrid.setItems(operatorRepository.findAll());
