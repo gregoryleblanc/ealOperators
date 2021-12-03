@@ -1,5 +1,6 @@
 package edu.ohio.inpp.acceleratorOperators;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyNotifier;
 import com.vaadin.flow.component.button.Button;
@@ -48,12 +49,11 @@ public class OperatorEditor extends VerticalLayout implements KeyNotifier {
         formLayout.addFormItem(firstName, "First name");
         formLayout.addFormItem(lastName, "Last Name");
         formLayout.addFormItem(active, "Active");
-        formLayout.add(addEmail);
 
         actions.add(save, reset, delete);
         save.getStyle().set("marginRight", "10px");
 
-        add(formLayout, actions);
+        add(formLayout, addEmail, actions);
 
         // bind using naming convention
         binder.bindInstanceFields(this);
@@ -117,5 +117,16 @@ public class OperatorEditor extends VerticalLayout implements KeyNotifier {
         // ChangeHandler is notified when either save or delete
         // is clicked
         changeHandler = hand;
+    }
+
+    // This sets lets us create the active column as a checkbox.
+    // Doesn't let us save it properly yet.
+    private Component createActiveCheckbox(Operator myBean) {
+        Checkbox checkbox = new Checkbox();
+            checkbox.setValue(myBean.getActive());
+            checkbox.addClickListener(activeListener -> myBean.setActive(checkbox.getValue()));
+            operatorRepository.save(myBean);
+            // this.operatorGrid.getDataProvider().refreshItem(myBean);
+            return checkbox;
     }
 }
