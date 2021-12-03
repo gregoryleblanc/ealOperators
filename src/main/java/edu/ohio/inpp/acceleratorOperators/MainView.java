@@ -1,23 +1,19 @@
 package edu.ohio.inpp.acceleratorOperators;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.flow.spring.annotation.UIScope;
+import com.vaadin.flow.router.Route;
+
 import org.springframework.util.StringUtils;
-import com.vaadin.flow.data.binder.HasDataProvider;
-// com.vaadin.flow.data.binder.HasDataProvider.setItems
-
-
-import java.util.List;
-import java.util.ArrayList;
 
 
 @Route
@@ -57,9 +53,7 @@ public class MainView extends VerticalLayout{
         // operator editor.
         add(actions, operatorGrid, opEditor);
         operatorGrid.setHeight("300px");
-        operatorGrid.setColumns("id", "firstName", "lastName", "loginName");
-        // Make the ID column fixed width.
-        operatorGrid.getColumnByKey("id").setWidth("50px").setFlexGrow(0);
+        operatorGrid.setColumns("lastName", "firstName", "loginName");
 
         // Set up the filter box and plumb it in.
         filter.setPlaceholder("Search by last name");
