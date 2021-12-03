@@ -51,7 +51,12 @@ public class MainController {
             operatorRepository.save(operator);
             operator.setFirstName(firstNames[i]);
             operator.setLastName(lastNames[i]);
-            operator.setActive(true);
+            if (firstNames[i].equals("Bill")){
+                operator.setActive(false);
+            } 
+            else {
+                operator.setActive(true);
+            }
             operator.setComments("Here's a comment");
             operator.setLoginName(loginNames[i]);
             makeDemoPhones(operator.getId());
