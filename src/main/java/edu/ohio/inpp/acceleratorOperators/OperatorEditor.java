@@ -60,9 +60,9 @@ public class OperatorEditor extends VerticalLayout implements KeyNotifier {
         loginName.getElement().setEnabled(false);
         active.setLabel("Active");
         updated.setLabel("Last Updated");
-        updated.getElement().setEnabled(false);
+        updated.setReadOnly(true);
         created.setLabel("Operator Created");
-        created.getElement().setEnabled(false);
+        created.setReadOnly(true);
 
         formLayout.add(firstName, lastName, loginName, active, updated, created);
 
