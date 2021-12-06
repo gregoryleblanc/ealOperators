@@ -5,6 +5,7 @@ import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyNotifier;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.datetimepicker.DateTimePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -14,6 +15,9 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringComponent
@@ -27,7 +31,11 @@ public class OperatorEditor extends VerticalLayout implements KeyNotifier {
 
     TextField firstName = new TextField();
     TextField lastName = new TextField();
+    TextField loginName = new TextField();
+    DateTimePicker updated = new DateTimePicker();
+    DateTimePicker created = new DateTimePicker();
     Checkbox active = new Checkbox();
+    Set<Email> email = new HashSet<Email>();
 
     // Action buttons
     Button save = new Button("Save", VaadinIcon.CHECK.create());
@@ -45,10 +53,18 @@ public class OperatorEditor extends VerticalLayout implements KeyNotifier {
 
         this.operatorRepository = opRepository;
 
-        // add(firstName, lastName, active, actions);
-        formLayout.addFormItem(firstName, "First name");
-        formLayout.addFormItem(lastName, "Last Name");
-        formLayout.addFormItem(active, "Active");
+        // Set up the labels for the form fields, and add them to the form.
+        firstName.setLabel("First Name");
+        lastName.setLabel("Last Name");
+        loginName.setLabel("Login Name");
+        loginName.getElement().setEnabled(false);
+        active.setLabel("Active");
+        updated.setLabel("Last Updated");
+        updated.getElement().setEnabled(false);
+        created.setLabel("Operator Created");
+        created.getElement().setEnabled(false);
+
+        formLayout.add(firstName, lastName, loginName, active, updated, created);
 
         actions.add(save, reset, delete);
         save.getStyle().set("marginRight", "10px");
@@ -79,6 +95,7 @@ public class OperatorEditor extends VerticalLayout implements KeyNotifier {
     }
 
     void save() {
+        operator.setUpdated(LocalDateTime.now());
         operatorRepository.save(operator);
         changeHandler.onChange();
     }
